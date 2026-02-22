@@ -40,7 +40,7 @@ function renderCountry(arr) {
   // countrydiv.style.display = "block";
   arr.forEach((item) => {
     countrydiv.innerHTML += `
-    <div class="product-card">
+    <div class="product-card" data-code="${item.cca3}">
     <div class="flags">
     <img src="${item.flags.png}"></div>
     <div class="sources">

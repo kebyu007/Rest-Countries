@@ -1,0 +1,64 @@
+* {
+    font-family: "Segoe UI", sans-serif;
+}
+.contain{
+    width: 80%;
+    /* height: 100px; */
+    margin: 50px auto;
+}
+
+#back{
+    cursor: pointer;
+    padding: 10px 30px;
+    background-color: white;
+  /* color: white; */
+  font-size: large;
+  border: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+.items {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+}
+.nav {
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+.nav button {
+  text-decoration: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+#detail{
+    margin: 40px auto;
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 50px;
+    /* align-items: center; */
+}
+#detail .flexal {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 ustun */
+  gap: 40px;
+  align-items: start;
+}
+
+/* Rasm chapda, ma'lumot o‘ngda */
+#detail .fimg img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Kichik ekranlarda 1 ustun */
+@media (max-width: 768px) {
+  #detail .flexal {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,39 @@
+/* Oq (default) */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #fbfbfb;
+  --card: #ffffff;
+  --text: #111517;
+  --input: #ffffff;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Dark mode */
+body.dark {
+  --bg: #202c37;
+  --bg-soft: #2b3945;
+  --card: #2b3945;
+  --text: #ffffff;
+  --input: #2b3945;
+  --shadow: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.nav,
+.head input,
+#sort,
+#back,
+.product-card,
+#detail {
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.product-card:hover {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}

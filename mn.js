@@ -2,7 +2,6 @@ const input = document.querySelector(".input");
 const countrydiv = document.querySelector(".box");
 const sortSelect = document.querySelector("#sort");
 const pagination = document.querySelector("#pagination");
-const stats = document.querySelector("#stats");
 
 const ITEMS_PER_PAGE = 12;
 let productArr = [];
@@ -16,24 +15,8 @@ class NotFoundException extends Error {
   }
 }
 
-function updateStats(showing, total, mode = "list") {
-  if (!stats) return;
-
-  if (mode === "search") {
-    stats.textContent = `Qidiruv natijasi: ${showing} ta, jami: ${total} ta davlat.`;
-    return;
-  }
-
-  stats.textContent = `Ko‘rsatilmoqda: ${showing} / ${total} ta davlat.`;
-}
-
 function renderCountry(arr) {
   countrydiv.innerHTML = "";
-
-  if (!arr.length) {
-    countrydiv.innerHTML = `<p class="error-text">Davlat topilmadi</p>`;
-    return;
-  }
 
   arr.forEach((item) => {
     countrydiv.innerHTML += `
@@ -75,14 +58,12 @@ function renderCurrentPage() {
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
   const pageData = filteredArr.slice(start, end);
-
-  renderCountry(pageData);
+  allcountry(pageData);
   renderPagination();
-  updateStats(pageData.length, filteredArr.length, "list");
 }
 
 async function fetchCountry(name) {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,flags,population,region,capital,cca3`);
+  const res = await fetch(`https://restcountries.com/v3.1/name/${name}`);
 
   if (!res.ok) {
     throw new NotFoundException("Davlat topilmadi");
@@ -91,7 +72,6 @@ async function fetchCountry(name) {
   const data = await res.json();
   renderCountry(data);
   pagination.innerHTML = "";
-  updateStats(data.length, productArr.length, "search");
 }
 
 async function handleSearch() {
@@ -109,9 +89,8 @@ async function handleSearch() {
   try {
     await fetchCountry(name);
   } catch (err) {
-    countrydiv.innerHTML = `<p class="error-text">${err.message}</p>`;
+    countrydiv.innerHTML = `<p style="color:red; font-weight:bold;">${err.message}</p>`;
     pagination.innerHTML = "";
-    updateStats(0, productArr.length, "search");
   }
 }
 
@@ -135,8 +114,33 @@ async function products() {
 
 products();
 
+function allcountry(data) {
+  let html = "";
+
+  data.forEach((item) => {
+    html += `
+      <div class="product-card" data-code="${item.cca3}">
+        <div class="flags">
+          <img src="${item.flags.svg}">
+        </div>
+        <div class="sources">
+          <h3>${item.name.official}</h3>
+          <ul>
+            <li><b>Population:</b> ${item.population.toLocaleString()}</li>
+            <li><b>Region:</b> ${item.region}</li>
+            <li id="extra"><b>Capital:</b> ${item.capital}</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  });
+
+  countrydiv.innerHTML = html;
+}
+
 countrydiv.addEventListener("click", (e) => {
   const card = e.target.closest(".product-card");
+
   if (!card) return;
 
   const code = card.dataset.code;
@@ -145,6 +149,7 @@ countrydiv.addEventListener("click", (e) => {
 
 pagination.addEventListener("click", (e) => {
   const btn = e.target.closest(".page-btn");
+
   if (!btn) return;
 
   currentPage = Number(btn.dataset.page);

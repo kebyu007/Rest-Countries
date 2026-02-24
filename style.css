@@ -32,10 +32,7 @@
   --transition-slow: 0.5s ease;
 }
 
-/* body{
-      /* background-color: black; */
-/* color: white; */
-*/ .head {
+.head {
   width: 80%;
   margin: 0 auto;
   text-align: center;
@@ -234,3 +231,46 @@ a {
   background-color: var(--green-color);
   color: #ffffff;
 }
+
+
+.head-wrap {
+  width: 80%;
+  margin: 0 auto 12px;
+}
+
+.stats {
+  margin: 14px 0 0;
+  color: var(--text-gray);
+  font-weight: 600;
+}
+
+.empty-msg {
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.page-btn {
+  color: var(--text-dark);
+}
+
+@media (max-width: 900px) {
+  .head {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .head input,
+  #sort {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .box {
+    width: 90%;
+    padding: 20px 0;
+    justify-content: center;
+  }
+}
+

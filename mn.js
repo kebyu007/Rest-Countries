@@ -1,8 +1,10 @@
-
 const input = document.querySelector(".input");
 const countrydiv = document.querySelector(".box");
 const sortSelect = document.querySelector("#sort");
 const pagination = document.querySelector("#pagination");
+
+const stats = document.querySelector("#stats");
+
 
 const ITEMS_PER_PAGE = 12;
 let productArr = [];
@@ -16,28 +18,59 @@ class NotFoundException extends Error {
   }
 }
 
+function updateStats(showing, total, mode = "list") {
+  if (!stats) return;
+
+  if (mode === "search") {
+    stats.textContent = `Qidiruv natijasi: ${showing} ta davlat topildi (jami ${total} ta bazada).`;
+    return;
+  }
+
+  stats.textContent = `Ko‘rsatilmoqda: ${showing} / ${total} ta davlat.`;
+}
+
 function renderCountry(arr) {
   countrydiv.innerHTML = "";
 
+  if (!arr.length) {
+    countrydiv.innerHTML = `<p class="empty-msg">Davlat topilmadi.</p>`;
+    return;
+  }
+
+
+function renderCountry(arr) {
+  countrydiv.innerHTML = "";
+
+
   arr.forEach((item) => {
     countrydiv.innerHTML += `
-    <div class="product-card" data-code="${item.cca3}">
-    <div class="flags">
-    <img src="${item.flags.png}"></div>
-    <div class="sources">
-    <h3>${item.name.official}</h3>
-    <ul>
-    <li><b>Population:</b> ${item.population.toLocaleString()}</li>
-    <li><b>Region: </b>${item.region}</li>
-    <li id="extra"><b>Capital:</b> ${item.capital}</li>
-    </ul></div>
-    </div>
+      <div class="product-card" data-code="${item.cca3}">
+        <div class="flags">
+          <img src="${item.flags.svg || item.flags.png}" alt="${item.name.official}">
+        </div>
+        <div class="sources">
+          <h3>${item.name.official}</h3>
+          <ul>
+            <li><b>Population:</b> ${item.population.toLocaleString()}</li>
+            <li><b>Region:</b> ${item.region || "Noma'lum"}</li>
+            <li id="extra"><b>Capital:</b> ${item.capital?.[0] || "Noma'lum"}</li>
+          </ul>
+        </div>
+      </div>
     `;
   });
 }
 
 function renderPagination() {
   const totalPages = Math.ceil(filteredArr.length / ITEMS_PER_PAGE);
+
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
 
   if (totalPages <= 1) {
     pagination.innerHTML = "";
@@ -134,8 +167,7 @@ function allcountry(data) {
     `;
   });
 
-  countrydiv.innerHTML = html;
-}
+products();
 
 countrydiv.addEventListener("click", (e) => {
   const card = e.target.closest(".product-card");

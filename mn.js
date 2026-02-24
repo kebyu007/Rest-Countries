@@ -1,4 +1,3 @@
-
 const input = document.querySelector(".input");
 const countrydiv = document.querySelector(".box");
 const sortSelect = document.querySelector("#sort");
@@ -21,17 +20,19 @@ function renderCountry(arr) {
 
   arr.forEach((item) => {
     countrydiv.innerHTML += `
-    <div class="product-card" data-code="${item.cca3}">
-    <div class="flags">
-    <img src="${item.flags.png}"></div>
-    <div class="sources">
-    <h3>${item.name.official}</h3>
-    <ul>
-    <li><b>Population:</b> ${item.population.toLocaleString()}</li>
-    <li><b>Region: </b>${item.region}</li>
-    <li id="extra"><b>Capital:</b> ${item.capital}</li>
-    </ul></div>
-    </div>
+      <div class="product-card" data-code="${item.cca3}">
+        <div class="flags">
+          <img src="${item.flags.svg || item.flags.png}" alt="${item.name.official}">
+        </div>
+        <div class="sources">
+          <h3>${item.name.official}</h3>
+          <ul>
+            <li><b>Population:</b> ${item.population.toLocaleString()}</li>
+            <li><b>Region:</b> ${item.region}</li>
+            <li id="extra"><b>Capital:</b> ${item.capital?.[0] || "Noma'lum"}</li>
+          </ul>
+        </div>
+      </div>
     `;
   });
 }

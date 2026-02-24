@@ -46,6 +46,7 @@
   grid-template-columns: 1fr 1fr; /* 2 ustun */
   gap: 40px;
   align-items: start;
+  padding: 10px 20px;
 }
 
 /* Rasm chapda, ma'lumot o‘ngda */
@@ -61,4 +62,13 @@
   #detail .flexal {
     grid-template-columns: 1fr;
   }
+}
+
+
+.detailss h2{
+  margin-top: 0;
+}
+
+#tld{
+  margin-top: 52px;
 }

@@ -28,7 +28,7 @@ if (!code) {
       <p><b>Capital:</b> ${country.capital}</p>
       </div>
       <div class="ext">
-      <p><b>Top Level Domain:</b> ${country.tld}</p>
+      <p id="tld"><b>Top Level Domain:</b> ${country.tld}</p>
       <p><b>Currencies:</b> ${Object.values(country.currencies || {})
       .map((c) => c.name)
       .join(", ")

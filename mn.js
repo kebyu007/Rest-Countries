@@ -107,7 +107,7 @@ function allcountry(data) {
           <ul>
             <li><b>Population:</b> ${item.population.toLocaleString()}</li>
             <li><b>Region:</b> ${item.region}</li>
-            <li><b>Capital:</b> ${item.capital}</li>
+            <li id="extra"><b>Capital:</b> ${item.capital}</li>
           </ul>
         </div>
       </div>

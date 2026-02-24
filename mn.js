@@ -1,20 +1,13 @@
-
 const input = document.querySelector(".input");
-// const btn = document.querySelector(".btn");
 const countrydiv = document.querySelector(".box");
+const sortSelect = document.querySelector("#sort");
+const pagination = document.querySelector("#pagination");
+const stats = document.querySelector("#stats");
 
-// const themeBtn = document.querySelector("#themeBtn");
-// const body = document.body;
-
-// themeBtn.addEventListener("click", () => {
-//   body.classList.toggle("dark");
-
-//   const isDark = body.classList.contains("dark");
-
-//   themeBtn.innerHTML = isDark
-//     ? `<span><i class="fa-regular fa-sun"></i></span> Light Mode`
-//     : `<span><i class="fa-regular fa-moon"></i></span> Dark Mode`;
-// });
+const ITEMS_PER_PAGE = 12;
+let productArr = [];
+let filteredArr = [];
+let currentPage = 1;
 
 class NotFoundException extends Error {
   constructor(message) {
@@ -23,8 +16,73 @@ class NotFoundException extends Error {
   }
 }
 
+function updateStats(showing, total, mode = "list") {
+  if (!stats) return;
+
+  if (mode === "search") {
+    stats.textContent = `Qidiruv natijasi: ${showing} ta, jami: ${total} ta davlat.`;
+    return;
+  }
+
+  stats.textContent = `Ko‘rsatilmoqda: ${showing} / ${total} ta davlat.`;
+}
+
+function renderCountry(arr) {
+  countrydiv.innerHTML = "";
+
+  if (!arr.length) {
+    countrydiv.innerHTML = `<p class="error-text">Davlat topilmadi</p>`;
+    return;
+  }
+
+  arr.forEach((item) => {
+    countrydiv.innerHTML += `
+      <div class="product-card" data-code="${item.cca3}">
+        <div class="flags">
+          <img src="${item.flags.svg || item.flags.png}" alt="${item.name.official}">
+        </div>
+        <div class="sources">
+          <h3>${item.name.official}</h3>
+          <ul>
+            <li><b>Population:</b> ${item.population.toLocaleString()}</li>
+            <li><b>Region:</b> ${item.region}</li>
+            <li id="extra"><b>Capital:</b> ${item.capital?.[0] || "Noma'lum"}</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(filteredArr.length / ITEMS_PER_PAGE);
+
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
+  for (let i = 1; i <= totalPages; i += 1) {
+    html += `<button class="page-btn ${i === currentPage ? "active" : ""}" data-page="${i}">${i}</button>`;
+  }
+
+  pagination.innerHTML = html;
+}
+
+function renderCurrentPage() {
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const pageData = filteredArr.slice(start, end);
+
+  renderCountry(pageData);
+  renderPagination();
+  updateStats(pageData.length, filteredArr.length, "list");
+}
+
 async function fetchCountry(name) {
-  const res = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+  const res = await fetch(`https://restcountries.com/v3.1/name/${name}?fields=name,flags,population,region,capital,cca3`);
 
   if (!res.ok) {
     throw new NotFoundException("Davlat topilmadi");
@@ -32,90 +90,50 @@ async function fetchCountry(name) {
 
   const data = await res.json();
   renderCountry(data);
+  pagination.innerHTML = "";
+  updateStats(data.length, productArr.length, "search");
 }
 
-function renderCountry(arr) {
-  countrydiv.innerHTML = "";
+async function handleSearch() {
+  const name = input.value.trim();
 
-  // countrydiv.style.display = "block";
-  arr.forEach((item) => {
-    countrydiv.innerHTML += `
-    <div class="product-card" data-code="${item.cca3}">
-    <div class="flags">
-    <img src="${item.flags.png}"></div>
-    <div class="sources">
-    <h3>${item.name.official}</h3>
-    <ul>
-    <li><b>Population:</b> ${item.population.toLocaleString()}</li>
-    <li><b>Region: </b>${item.region}</li>
-    <li id="extra"><b>Capital:</b> ${item.capital}</li>
-    </ul></div>
-    </div>
-    `;
-  });
-}
-
-  async function handleSearch() {
-    const name = input.value.trim();
-    if (!name) return;
-
-    // countrydiv.style.display = "block";
-    countrydiv.innerHTML = "Yuklanmoqda...";
-
-    try {
-      await fetchCountry(name);
-    } catch (err) {
-      countrydiv.innerHTML = `<p style="color:red; font-weight:bold;">${err.message}</p>`;
-    }
+  if (!name) {
+    filteredArr = [...productArr];
+    currentPage = 1;
+    renderCurrentPage();
+    return;
   }
 
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  });
-////////////////--------------------------------------\\\\\\\\\\\\\\\\\\\\\\\\
+  countrydiv.innerHTML = "Yuklanmoqda...";
 
-// const box = document.querySelector(".products-grid");
+  try {
+    await fetchCountry(name);
+  } catch (err) {
+    countrydiv.innerHTML = `<p class="error-text">${err.message}</p>`;
+    pagination.innerHTML = "";
+    updateStats(0, productArr.length, "search");
+  }
+}
 
-let productArr = [];
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    handleSearch();
+  }
+});
+
 async function products() {
   const res = await fetch(
     "https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital,cca3",
     { method: "GET" },
   );
+
   productArr = await res.json();
-  // console.log(productArr[0])
-  allcountry(productArr)
-  // allcountry(productArr);
+  filteredArr = [...productArr];
+  currentPage = 1;
+  renderCurrentPage();
 }
+
 products();
-
-// console.log(productArr);
-
-function allcountry(data) {
-  let html = "";
-
-  data.forEach((item) => {
-    html += `
-      <div class="product-card" data-code="${item.cca3}">
-        <div class="flags">
-          <img src="${item.flags.svg}">
-        </div>
-        <div class="sources">
-          <h3>${item.name.official}</h3>
-          <ul>
-            <li><b>Population:</b> ${item.population.toLocaleString()}</li>
-            <li><b>Region:</b> ${item.region}</li>
-            <li id="extra"><b>Capital:</b> ${item.capital}</li>
-          </ul>
-        </div>
-      </div>
-    `;
-  });
-
-  countrydiv.innerHTML = html;
-}
 
 countrydiv.addEventListener("click", (e) => {
   const card = e.target.closest(".product-card");
@@ -125,28 +143,29 @@ countrydiv.addEventListener("click", (e) => {
   window.location.href = `extra.html?code=${code}`;
 });
 
-const sortSelect = document.querySelector("#sort");
+pagination.addEventListener("click", (e) => {
+  const btn = e.target.closest(".page-btn");
+  if (!btn) return;
+
+  currentPage = Number(btn.dataset.page);
+  renderCurrentPage();
+});
 
 sortSelect.addEventListener("change", () => {
   const selectedVal = sortSelect.value;
 
-  // console.log(selectedVal);
-
   if (selectedVal === "default") {
-    countrydiv.innerHTML = "";
-    allcountry(productArr);
+    filteredArr = [...productArr];
   } else if (selectedVal === "africa") {
-    countrydiv.innerHTML = "";
-    allcountry(productArr.filter(item=>item.region==='Africa'));
-    // console.log(productArr.map(item => item.region));
+    filteredArr = productArr.filter((item) => item.region === "Africa");
   } else if (selectedVal === "america") {
-    countrydiv.innerHTML = "";
-    allcountry(productArr.filter(item=>item.region==='Americas'));
+    filteredArr = productArr.filter((item) => item.region === "Americas");
   } else if (selectedVal === "europe") {
-    countrydiv.innerHTML = "";
-    allcountry(productArr.filter(item=>item.region==='Europe'));
+    filteredArr = productArr.filter((item) => item.region === "Europe");
   } else if (selectedVal === "asia") {
-    countrydiv.innerHTML = "";
-    allcountry(productArr.filter(item=>item.region==='Asia'));
+    filteredArr = productArr.filter((item) => item.region === "Asia");
   }
+
+  currentPage = 1;
+  renderCurrentPage();
 });

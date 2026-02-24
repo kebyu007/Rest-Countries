@@ -1,21 +1,19 @@
-/* Oq (default) */
 :root {
-  --bg: #ffffff;
-  --bg-soft: #fbfbfb;
+  --bg: #f8fafc;
   --card: #ffffff;
   --text: #111517;
-  --input: #ffffff;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --muted: #5f6b7a;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --border-soft: #e6e8ec;
 }
 
-/* Dark mode */
 body.dark {
-  --bg: #202c37;
-  --bg-soft: #2b3945;
-  --card: #2b3945;
-  --text: #ffffff;
-  --input: #2b3945;
-  --shadow: none;
+  --bg: #243341;
+  --card: #304354;
+  --text: #f4f7fb;
+  --muted: #c9d3de;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  --border-soft: #41586d;
 }
 
 body {
@@ -28,12 +26,35 @@ body {
 #sort,
 #back,
 .product-card,
-#detail {
-  background: var(--card);
+#detail,
+.page-btn,
+.border-btn,
+.btn {
   color: var(--text);
+}
+
+.nav,
+.head input,
+#sort,
+#back,
+.product-card,
+#detail,
+.page-btn,
+.border-btn {
+  background: var(--card);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border-soft);
+}
+
+.btn {
+  background: transparent;
+  border: none;
+}
+
+.stats {
+  color: var(--muted);
 }
 
 .product-card:hover {
-  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }

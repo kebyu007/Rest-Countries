@@ -11,11 +11,20 @@ let productArr = [];
 let filteredArr = [];
 let currentPage = 1;
 
-class NotFoundException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "NotFoundException";
+  const buttons = [];
+  for (let i = 1; i <= totalPages; i += 1) {
+    buttons.push(`<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`);
   }
+  pagination.innerHTML = buttons.join('');
+}
+
+function renderCurrentPage() {
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const pageData = filteredArr.slice(start, end);
+  renderCountry(pageData, 'Tanlangan filter bo‘yicha davlat topilmadi.');
+  renderPagination();
+  updateStats(pageData.length, filteredArr.length, 'list');
 }
 
 function updateStats(showing, total, mode = "list") {
@@ -76,6 +85,7 @@ function renderPagination() {
     pagination.innerHTML = "";
     return;
   }
+});
 
   let html = "";
 
@@ -187,7 +197,11 @@ pagination.addEventListener("click", (e) => {
   renderCurrentPage();
 });
 
-sortSelect.addEventListener("change", () => {
+  currentPage = Number(btn.dataset.page);
+  renderCurrentPage();
+});
+
+sortSelect.addEventListener('change', () => {
   const selectedVal = sortSelect.value;
 
   if (selectedVal === "default") {

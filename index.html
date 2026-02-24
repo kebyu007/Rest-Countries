@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rest Countries by Kebyu</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./theme.css">
+    <link rel="stylesheet" href="./theme.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
@@ -14,7 +14,7 @@
       referrerpolicy="no-referrer"
     />
   </head>
-  <body class="widd">
+  <body>
     <div class="nav">
       <div class="items">
         <h2>Where in the world</h2>
@@ -26,7 +26,14 @@
 
     <div class="head-wrap">
       <div class="head">
-        <input class="input" placeholder="Enter country name..." type="text" />
+        <div class="input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            class="input"
+            placeholder="Enter country name..."
+            type="text"
+          />
+        </div>
         <select id="sort">
           <option value="default">Filter by region</option>
           <option value="africa">Africa</option>
@@ -45,4 +52,9 @@
     <script src="./mn.js"></script>
   </body>
 </html>
-<script async data-explicit-opt-in="true" data-deployment-id="dpl_47tVGYtEKRqnyCLqNVZ5Lrw22fpQ" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
+<script
+  async
+  data-explicit-opt-in="true"
+  data-deployment-id="dpl_47tVGYtEKRqnyCLqNVZ5Lrw22fpQ"
+  src="https://vercel.live/_next-live/feedback/feedback.js"
+></script>

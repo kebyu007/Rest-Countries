@@ -31,6 +31,9 @@
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
 }
+body{
+  margin: 0 0 0 0;
+}
 
 .head {
   width: 80%;
@@ -40,7 +43,7 @@
   position: relative;
 }
 
-.head input {
+.input {
   width: 50%;
   padding: 20px 40px;
   border-radius: 5px;
@@ -56,6 +59,7 @@
   list-style: none;
 }
 .nav {
+  width: 100%;
   box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
   margin-bottom: 30px;
 }
@@ -192,4 +196,30 @@ a {
 .page-btn.active {
   background-color: var(--green-color);
   color: #ffffff;
+}
+
+
+.input-wrap {
+  position: relative;
+  width: 50%  /* yoki 100% bo‘lsa ham bo‘ladi */
+}
+
+.input-wrap i {
+  position: absolute;
+  left: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+}
+
+/* Faqat padding qo‘shamiz, qolgan .input style’lariga tegmaymiz */
+.input {
+  width: 85%;
+  padding-left: 60px; /* ikonka uchun joy */
+}
+
+/* Dark mode moslashuv (senda bor bo‘lsa) */
+body.dark .input-wrap i {
+  color: #aaa;
 }
